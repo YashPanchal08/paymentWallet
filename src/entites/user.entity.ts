@@ -4,6 +4,7 @@ import { AuthTokenEntity } from "./authToken.entity";
 import { AccountEntity } from "./account.entity";
 import { PaymentEntity } from "./payment.entity";
 import { SplitEntity } from "./split.entity";
+import { SettleUpEntity } from "./settleUp.entity";
 
 @Entity({ name: "user" })
 export class UserEntity {
@@ -66,4 +67,10 @@ export class UserEntity {
 
   @OneToMany(() => SplitEntity, (splitEntity) => splitEntity.reciverEntity)
   reciverSplitEntity: SplitEntity[];
+
+  @OneToMany(() => SettleUpEntity, (settleUpEntity) => settleUpEntity.userEntity)
+  settleUpEntity: SettleUpEntity[];
+
+  @OneToMany(() => SettleUpEntity, (settleUpEntity) => settleUpEntity.reciverEntity)
+  reciverSettleUpEntity: SettleUpEntity[];
 }

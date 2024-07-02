@@ -15,7 +15,7 @@ export class PaymentEntity {
   @Column()
   fk_user_id: string;
 
-  @Column({ default: 0, type: "integer", nullable: true })
+  @Column({ default: 0, type: 'float', nullable: true })
   amount: number;
 
   @Column({ nullable: true })

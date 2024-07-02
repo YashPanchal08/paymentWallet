@@ -7,22 +7,22 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 
-@Entity({ name: 'split' })
-export class SplitEntity {
-  static findAll(arg0: { where: { createdAt: { [x: number]: Date; }; }; }) {
-    throw new Error("Method not implemented.");
-  }
+@Entity({ name: 'settleUp' })
+export class SettleUpEntity {
   @PrimaryGeneratedColumn('uuid')
-  splitId: string;
+  settleUpId: string;
 
   @Column()
   fk_user_id: string;
 
-  @Column({ default: 0, type: 'float', nullable: true })
-  splitAmount: number;
+  @Column({ default: 0, type: 'real', nullable: true })
+  oweBy: number;
 
   @Column()
   fk_reciver_id: string;
+
+  @Column({ default: 0, type: 'real', nullable: true })
+  dueBy: number;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP',})
   createdAt: Date;
@@ -30,10 +30,8 @@ export class SplitEntity {
   @Column({ default: () => 'CURRENT_TIMESTAMP',})
   updatedAt: Date;
 
-  @Column({ default: 1, comment: `1 : amount settle up, 0 : amount not settle up` })
-  isSettle: number;
-
-  @ManyToOne(() => UserEntity, (userEntity) => userEntity.splitEntity, {
+  
+  @ManyToOne(() => UserEntity, (userEntity) => userEntity.settleUpEntity, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
@@ -41,7 +39,7 @@ export class SplitEntity {
   userEntity: UserEntity[];
 
 
-  @ManyToOne(() => UserEntity, (userEntity) => userEntity.reciverSplitEntity, {
+  @ManyToOne(() => UserEntity, (userEntity) => userEntity.reciverSettleUpEntity, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

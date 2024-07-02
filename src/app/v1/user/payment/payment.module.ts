@@ -15,9 +15,11 @@ import { UserEntity } from "src/entites/user.entity";
 import { PaymentService } from "./payment.service";
 import { PaymentController } from "./payment.controller";
 import { AccountEntity } from "src/entites/account.entity";
+import { PaymentEntity } from "src/entites/payment.entity";
+import { SplitEntity } from "src/entites/split.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserEntity, AccountEntity])],
+    imports: [TypeOrmModule.forFeature([UserEntity, AccountEntity, PaymentEntity, SplitEntity])],
     controllers: [PaymentController],
     providers: [
         PaymentService,
@@ -32,6 +34,7 @@ import { AccountEntity } from "src/entites/account.entity";
         Otp,
         FileValidators,
         ValidateFilePipe,
+    
     ],
     exports: [],
 })
