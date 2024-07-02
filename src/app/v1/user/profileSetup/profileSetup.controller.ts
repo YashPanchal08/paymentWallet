@@ -1,87 +1,120 @@
-import { Body, Controller, Inject, Post, Req, Res, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Post,
+  Put,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from "@nestjs/common";
 import { ResponseHelper } from "src/common/response";
 import { statusCode } from "src/common/statusCodes";
 import { ProfileSetupService } from "./profileSetup.service";
 import { NonAuthAdmin } from "src/guard/nonAuthAdmin.guard";
 import { Request, Response } from "express";
+import { OtpVerifyDto } from "./dto parth/otpVerify.dto";
+import { AuthAdmin } from "src/guard/authAdmin.guard";
+import bodyParser from "body-parser";
+import { DeleteUserDto } from "./dto parth/deleteUser.dto";
+import { GetUserById } from "./dto parth/getUserById.dto";
+import { EditUserDto } from "./dto parth/editUser.dto";
 
-@Controller({ path: '/user', version: '1' })
-
+@Controller({ path: "/user", version: "1" })
 export class ProfileSetupController {
+  constructor(
+    @Inject(ProfileSetupService)
+    private ProfileSetupService: ProfileSetupService,
+    private readonly response: ResponseHelper,
+    private readonly statuscode: statusCode
+  ) {}
 
-    constructor(
-        @Inject(ProfileSetupService) private ProfileSetupService: ProfileSetupService,
-        private readonly response: ResponseHelper,
-        private readonly statuscode: statusCode,
-    ) { }
-
-    @Post('/login')
-    @UseGuards(NonAuthAdmin)
-    async login(@Req() req: Request, @Res() res: Response, @Body() body: any): Promise<any> {
-        try {
-
-            const data = await this.ProfileSetupService.login(body);
-            await this.response.success(res, "PAGE_ADDED_SUCCESS", data, this.statuscode.success)
-
-        } catch (error) {
-            console.log(` Add category controller Error ${error}`);
-            this.response.error(res, error.message, this.statuscode.error)
-
-        }
+  @Post("/otpVerify")
+  @UseGuards(NonAuthAdmin)
+  async otpVerify(
+    @Req() req: any,
+    @Res() res: Response,
+    @Body() body: OtpVerifyDto
+  ): Promise<any> {
+    try {
+      const data = await this.ProfileSetupService.otpVerify(body);
+      await this.response.success(res, "OTP_VERIFIED", data, this.statuscode.success);
+    } catch (error) {
+      console.log(` otp verify controller Error ${error}`);
+      this.response.error(res, error.message, this.statuscode.error);
     }
+  }
 
+  @Delete("deleteUser")
+  @UseGuards(AuthAdmin)
+  async deleteUser(
+    @Req() req: any,
+    @Res() res: Response,
+    @Body() body: DeleteUserDto,
+  ): Promise<any> {
+    try {
+      if (req.user_id) {
+        body.user_id = req.user_id;
+      }
+      let data = await this.ProfileSetupService.deleteUser(body);
+      await this.response.success(
+        res,
+        "DELETE_USER",
+        data,
+        this.statuscode.success
+      );
+    } catch (error) {
+      console.log(` delete user controller Error ${error}`);
+      this.response.error(res, error.message, this.statuscode.error);
+    }
+  }
 
-    // @Get('getAllPages')
-    // async getAllPages(@Req() req: Request, @Res() res: Response, @Query() param: any) {
-    //     try {
+  @Put("editUser")
+  @UseGuards(AuthAdmin)
+  async editUser(
+    @Req() req: any,
+    @Res() res: Response,
+    @Body() body: EditUserDto
+  ): Promise<any> {
+    try {
+      if (req.user_id) {
+        body.user_id = req.user_id;
+      }
+      let data = await this.ProfileSetupService.editUser(body);
+      await this.response.success(
+        res,
+        "EDIT_PROFILE_SUCCESS",
+        data,
+        this.statuscode.success
+      );
+    } catch (error) {
+      console.log(` edit profile controller Error ${error}`);
+      this.response.error(res, error.message, this.statuscode.error);
+    }
+  }
 
-    //         const data = await this.ProfileSetupService.getAllPages(param);
-    //         await this.response.success(res, "SUCCESS", data, this.statuscode.success)
-
-    //     } catch (error) {
-    //         console.log(` Get All Category controller Error ${error}`);
-    //         this.response.error(res, error.message, this.statuscode.error)
-    //     }
-    // }
-
-    // @Get('getPageById')
-    // async getPageById(@Req() req: Request, @Res() res: Response, @Query() param: any) {
-    //     try {
-
-    //         const data = await this.ProfileSetupService.getPageById(param);
-    //         await this.response.success(res, "SUCCESS", data, this.statuscode.success)
-
-    //     } catch (error) {
-    //         console.log(` Get Category By Id controller Error ${error}`);
-    //         this.response.error(res, error.message, this.statuscode.error)
-    //     }
-    // }
-
-    // @Delete('removePage')
-    // async removePage(@Req() req: Request, @Res() res: Response, @Query() params: any): Promise<any> {
-    //     try {
-
-    //         let data = await this.ProfileSetupService.removePage(params);
-    //         await this.response.success(res, "PAGE_DELETE_SUCCESS", data, this.statuscode.success)
-
-    //     } catch (error) {
-    //         console.log(` update Category By Id controller Error ${error}`);
-    //         this.response.error(res, error.message, this.statuscode.error)
-    //     }
-    // }
-
-    // @Put('editPage')
-    // async editPage(@Req() req: Request, @Res() res: Response, @Body() body: any): Promise<any> {
-    //     try {
-
-    //         let data = await this.ProfileSetupService.editPage(body);
-    //         await this.response.success(res, "PAGE_EDIT_SUCCESS", data, this.statuscode.success)
-
-    //     } catch (error) {
-    //         console.log(` update Category By Id controller Error ${error}`);
-    //         this.response.error(res, error.message, this.statuscode.error)
-    //     }
-    // }
-
+  @Delete("getUserById")
+  @UseGuards(AuthAdmin)
+  async getUserById(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query() params: GetUserById
+  ): Promise<any> {
+    try {
+      let data = await this.ProfileSetupService.getUserById(params);
+      await this.response.success(
+        res,
+        "SUCCESS",
+        data,
+        this.statuscode.success
+      );
+    } catch (error) {
+      console.log(` get User By Id user controller Error ${error}`);
+      this.response.error(res, error.message, this.statuscode.error);
+    }
+  }
 
 }

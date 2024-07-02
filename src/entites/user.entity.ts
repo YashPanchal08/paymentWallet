@@ -16,9 +16,6 @@ export class UserEntity {
   @Column({ type: "character varying", unique: true })
   email: string;
 
-  @Column({ nullable: true, type: "character varying" })
-  image: string;
-
   @Column({ type: "character varying" })
   mobileNumber: string;
 
