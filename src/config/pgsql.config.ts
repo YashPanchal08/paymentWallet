@@ -8,8 +8,7 @@ export const database: any = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  // entites:[UserEntity,AuthTokenEntity,DeviceRelationEntity,PaymentEntity,SplitEntity,AccountEntity],
-  entities: [join(__dirname, "../entities/**/*.entity{.ts,.js}")],
+  entities: [join(__dirname, "../entites/**/*.entity{.ts,.js}")],
   synchronize: false,
   logging: true
 }
