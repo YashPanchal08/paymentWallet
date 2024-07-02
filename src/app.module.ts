@@ -12,11 +12,11 @@ import { Mailer } from "./common/mailer";
 import { Otp } from "./common/generateOtp";
 import { FileValidators } from "./common/Validators";
 import { ValidateFilePipe } from "./common/ValidateFile";
-
 import { JwtUserMiddleware } from "./common/middleware";
+import { ProfileSetupModule } from "./app/v1/user/profileSetup/profileSetup.module";
 
 @Module({
-  imports: [TypeOrmModule.forRoot(database)],
+  imports: [TypeOrmModule.forRoot(database),ProfileSetupModule],
   controllers: [],
   providers: [
     NonAuthAdmin,

@@ -14,12 +14,24 @@ import { ValidateFilePipe } from "src/common/ValidateFile";
 import { UserEntity } from "src/entites/user.entity";
 import { ProfileSetupService } from "./profileSetup.service";
 import { ProfileSetupController } from "./profileSetup.controller";
-    
-@Module({
-    imports: [TypeOrmModule.forFeature([UserEntity])],
-    controllers: [ProfileSetupController],
-    providers: [ProfileSetupService, NonAuthAdmin, ValidateAdminHeaders, ValidateHeaders, ResponseHelper, statusCode, passwordHasing, token, Mailer, Otp, FileValidators, ValidateFilePipe],
-    exports: []
-})
 
-export class ProfileSetupModule { }
+@Module({
+  imports: [TypeOrmModule.forFeature([UserEntity])],
+  controllers: [ProfileSetupController],
+  providers: [
+    ProfileSetupService,
+    NonAuthAdmin,
+    ValidateAdminHeaders,
+    ValidateHeaders,
+    ResponseHelper,
+    statusCode,
+    passwordHasing,
+    token,
+    Mailer,
+    Otp,
+    FileValidators,
+    ValidateFilePipe,
+  ],
+  exports: [],
+})
+export class ProfileSetupModule {}
