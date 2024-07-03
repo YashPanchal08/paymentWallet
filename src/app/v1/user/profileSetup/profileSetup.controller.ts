@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Header, Headers, Inject, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { ResponseHelper } from "src/common/response";
 import { statusCode } from "src/common/statusCodes";
 import { ProfileSetupService } from "./profileSetup.service";
@@ -17,10 +17,10 @@ export class ProfileSetupController {
 
     @Post('/login')
     @UseGuards(NonAuthAdmin)
-    async login(@Req() req: Request, @Res() res: Response, @Body() body: any): Promise<any> {
+    async login(@Req() req: Request, @Res() res: Response, @Body() body: any, @Headers() headers : any): Promise<any> {
         try {
 
-            const data = await this.ProfileSetupService.login(body);
+            const data = await this.ProfileSetupService.login(body,headers);
             await this.response.success(res, "PAGE_ADDED_SUCCESS", data, this.statuscode.success)
 
         } catch (error) {
