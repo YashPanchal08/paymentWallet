@@ -15,9 +15,10 @@ import { UserEntity } from "src/entites/user.entity";
 import { ProfileSetupService } from "./profileSetup.service";
 import { ProfileSetupController } from "./profileSetup.controller";
 import { DeviceRelationEntity } from "src/entites/deviceRelation.entity";
+import { AccountEntity } from "src/entites/account.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity,DeviceRelationEntity])],
+  imports: [TypeOrmModule.forFeature([UserEntity, DeviceRelationEntity, AccountEntity])],
   controllers: [ProfileSetupController],
   providers: [
     ProfileSetupService,
