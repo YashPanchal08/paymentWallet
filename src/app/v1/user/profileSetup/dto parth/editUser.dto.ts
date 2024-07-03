@@ -1,16 +1,13 @@
 import { IsEmail, IsOptional, IsString, IsUUID } from "class-validator";
 
-export class EditUserDto{
+export class EditUserDto {
 
-  @IsUUID()
-  userId: string
-  
-  @IsUUID()
+  @IsUUID('4', { message: "Enter a Valid id" })
   @IsOptional()
-  user_id: string
+  userId: string
 
   @IsString()
-  fullName : string
+  fullName: string
 
   @IsEmail()
   email: string

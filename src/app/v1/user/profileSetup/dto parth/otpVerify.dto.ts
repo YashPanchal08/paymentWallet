@@ -1,7 +1,8 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsMobilePhone, IsNumber, IsString } from "class-validator";
 
 export class OtpVerifyDto{
-  @IsString()
+
+  @IsNumber()
   mobileNumber: string
 
   @IsNumber()

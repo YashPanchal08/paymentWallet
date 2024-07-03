@@ -6,7 +6,7 @@ import { ValidateHeaders } from "src/guard/validateUserHeaders.guard";
 import { ResponseHelper } from "src/common/response";
 import { statusCode } from "src/common/statusCodes";
 import { passwordHasing } from "src/common/passwordHashing";
-import { token } from "src/common/getJwtToken";
+import { Token } from "src/common/getJwtToken";
 import { Mailer } from "src/common/mailer";
 import { Otp } from "src/common/generateOtp";
 import { FileValidators } from "src/common/Validators";
@@ -27,7 +27,7 @@ import { DeviceRelationEntity } from "src/entites/deviceRelation.entity";
     ResponseHelper,
     statusCode,
     passwordHasing,
-    token,
+    Token,
     Mailer,
     Otp,
     FileValidators,

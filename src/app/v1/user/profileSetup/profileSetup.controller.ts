@@ -22,6 +22,7 @@ import { AuthAdmin } from "src/guard/authAdmin.guard";
 import { DeleteUserDto } from "./dto parth/deleteUser.dto";
 import { GetUserById } from "./dto parth/getUserById.dto";
 import { EditUserDto } from "./dto parth/editUser.dto";
+import { AuthUser } from "src/guard/authUser.guard";
 
 @Controller({ path: "/user", version: "1" })
 export class ProfileSetupController {
@@ -53,7 +54,22 @@ export class ProfileSetupController {
         try {
 
             const data = await this.ProfileSetupService.login(body, headers);
-            await this.response.success(res, "PAGE_ADDED_SUCCESS", data, this.statuscode.success)
+            await this.response.success(res, "OTP_SENT", data, this.statuscode.success)
+
+        } catch (error) {
+            console.log(` Add category controller Error ${error}`);
+            this.response.error(res, error.message, this.statuscode.error)
+
+        }
+    }
+
+    @Post('/resendOtp')
+    @UseGuards(NonAuthAdmin)
+    async resendOtp(@Req() req: Request, @Res() res: Response, @Body() body: any): Promise<any> {
+        try {
+
+            const data = await this.ProfileSetupService.resendOtp(body);
+            await this.response.success(res, "OTP_SENT", data, this.statuscode.success)
 
         } catch (error) {
             console.log(` Add category controller Error ${error}`);
@@ -63,15 +79,15 @@ export class ProfileSetupController {
     }
 
     @Delete("deleteUser")
-    @UseGuards(AuthAdmin)
+    @UseGuards(AuthUser)
     async deleteUser(
         @Req() req: any,
         @Res() res: Response,
         @Body() body: DeleteUserDto,
     ): Promise<any> {
-        try {
-            if (req.user_id) {
-                body.user_id = req.user_id;
+        try {   
+            if (req.userId) {
+                body.userId = req.userId;
             }
             let data = await this.ProfileSetupService.deleteUser(body);
             await this.response.success(
@@ -87,16 +103,17 @@ export class ProfileSetupController {
     }
 
     @Put("editUser")
-    @UseGuards(AuthAdmin)
+    @UseGuards(AuthUser)
     async editUser(
         @Req() req: any,
         @Res() res: Response,
         @Body() body: EditUserDto
     ): Promise<any> {
         try {
-            if (req.user_id) {
-                body.user_id = req.user_id;
+            if (req.userId) {
+                body.userId = req.userId;
             }
+            console.log(body);
             let data = await this.ProfileSetupService.editUser(body);
             await this.response.success(
                 res,
@@ -110,14 +127,18 @@ export class ProfileSetupController {
         }
     }
 
-    @Delete("getUserById")
-    @UseGuards(AuthAdmin)
+    @Get("getUserById")
+    @UseGuards(AuthUser)
     async getUserById(
-        @Req() req: Request,
+        @Req() req: any,
         @Res() res: Response,
-        @Query() params: GetUserById
     ): Promise<any> {
+
         try {
+            let params: any;
+            if (req.userId) {
+                params = req.userId
+            }
             let data = await this.ProfileSetupService.getUserById(params);
             await this.response.success(
                 res,

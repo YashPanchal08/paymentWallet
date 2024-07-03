@@ -42,7 +42,7 @@
       "COUPON_NOT_FOUND": "Category is not found",
       "RESET_PASSWORD_SUCCESS": "Password has been reset successfully.",
       "EDIT_PROFILE_SUCCESS": "Profile has been updated successfully.",
-      "CANNOT_EDIT":"Can not edit profile",
+      "CANNOT_EDIT":"Profile already exists.",
       "PASSWORD_CHANGED": "Password has been updated successfully.",
       "DOES_NOT_MATCH_PASSWORD": "Passwords do NOT match",
       "ENTER_PREVIOUS_PASSWORD": "Password cannot be previous password.",

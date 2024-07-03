@@ -7,7 +7,7 @@ import { ValidateHeaders } from "./guard/validateUserHeaders.guard";
 import { ResponseHelper } from "./common/response";
 import { statusCode } from "./common/statusCodes";
 import { passwordHasing } from "./common/passwordHashing";
-import { token } from "./common/getJwtToken";
+import { Token } from "./common/getJwtToken";
 import { Mailer } from "./common/mailer";
 import { Otp } from "./common/generateOtp";
 import { FileValidators } from "./common/Validators";
@@ -26,7 +26,7 @@ import { ProfileSetupModule } from "./app/v1/user/profileSetup/profileSetup.modu
     ResponseHelper,
     statusCode,
     passwordHasing,
-    token,
+    Token,
     Mailer,
     Otp,
     FileValidators,
