@@ -19,13 +19,33 @@ export class ProfileSetupService {
     ) { }
 
 
-    // async otpVerify(body: OtpVerifyDto): Promise<void> {
-    //     return new Promise(async (resolve, reject) => {
-    //         try {
-    //             let { mobileNumber, otp } = body
-    //             const userDetails = await this.userRepository.findOne({
-    //                 where: { mobileNumber: mobileNumber }
-    //             }
+    async otpVerify(body: OtpVerifyDto): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let { mobileNumber, otp } = body
+                const userDetails = await this.userRepository.findOne({
+                    where: { mobileNumber: mobileNumber }
+                })
+
+                if (!userDetails) {
+                    throw new ConflictException('USER_NOT')
+                }
+                else if (otp != userDetails.otp) {
+                    throw new ConflictException('USER_INVALID_OTP')
+                }
+                else {
+                    await this.userRepository.update(
+                        { mobileNumber: mobileNumber },
+                        { otp: null }
+                    )
+                }
+
+            } catch (error) {
+                console.log(`otp verify servioce error ${error}`);
+                reject(error);
+            }
+        });
+    }
 
 
     async login(body: any, headers: DeviceInfoDto): Promise<void> {
@@ -142,31 +162,6 @@ export class ProfileSetupService {
         })
 
     }
-
-    // async getUserById(body: any): Promise<void> {
-
-    //                     return new Promise(async (resolve, reject) => {
-    //                         try {
-
-    //                             if (!userDetails) {
-    //                                 throw new ConflictException('USER_NOT')
-    //                             }
-    //                             else if (otp != userDetails.otp) {
-    //                                 throw new ConflictException('USER_INVALID_OTP')
-    //                             }
-    //                             else {
-    //                                 await this.userRepository.update(
-    //                                     { mobileNumber: mobileNumber },
-    //                                     { otp: null }
-    //                                 )
-    //                             }
-
-    //                         } catch (error) {
-    //                             console.log(`otp verify servioce error ${error}`);
-    //                             reject(error);
-    //                         }
-    //                     });
-    //                 }
 
     async deleteUser(body: any): Promise<void> {
         return new Promise(async (resolve, reject) => {

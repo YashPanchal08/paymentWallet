@@ -1,4 +1,3 @@
-
 import {
     Body,
     Controller,
@@ -20,7 +19,6 @@ import { NonAuthAdmin } from "src/guard/nonAuthAdmin.guard";
 import { Request, Response } from "express";
 import { OtpVerifyDto } from "./dto parth/otpVerify.dto";
 import { AuthAdmin } from "src/guard/authAdmin.guard";
-import bodyParser from "body-parser";
 import { DeleteUserDto } from "./dto parth/deleteUser.dto";
 import { GetUserById } from "./dto parth/getUserById.dto";
 import { EditUserDto } from "./dto parth/editUser.dto";
@@ -33,21 +31,21 @@ export class ProfileSetupController {
         private readonly statuscode: statusCode,
     ) { }
 
-    // @Post("/otpVerify")
-    // @UseGuards(NonAuthAdmin)
-    // async otpVerify(
-    //     @Req() req: any,
-    //     @Res() res: Response,
-    //     @Body() body: OtpVerifyDto
-    // ): Promise<any> {
-    //     try {
-    //         const data = await this.ProfileSetupService.otpVerify(body);
-    //         await this.response.success(res, "OTP_VERIFIED", data, this.statuscode.success);
-    //     } catch (error) {
-    //         console.log(` otp verify controller Error ${error}`);
-    //         this.response.error(res, error.message, this.statuscode.error);
-    //     }
-    // }
+    @Post("/otpVerify")
+    @UseGuards(NonAuthAdmin)
+    async otpVerify(
+        @Req() req: any,
+        @Res() res: Response,
+        @Body() body: OtpVerifyDto
+    ): Promise<any> {
+        try {
+            const data = await this.ProfileSetupService.otpVerify(body);
+            await this.response.success(res, "OTP_VERIFIED", data, this.statuscode.success);
+        } catch (error) {
+            console.log(` otp verify controller Error ${error}`);
+            this.response.error(res, error.message, this.statuscode.error);
+        }
+    }
 
     @Post('/login')
     @UseGuards(NonAuthAdmin)
