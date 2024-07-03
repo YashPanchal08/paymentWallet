@@ -17,13 +17,13 @@ import { statusCode } from "src/common/statusCodes";
 import { ProfileSetupService } from "./profileSetup.service";
 import { NonAuthAdmin } from "src/guard/nonAuthAdmin.guard";
 import { Request, Response } from "express";
-import { AuthAdmin } from "src/guard/authAdmin.guard";
 import { DeleteUserDto } from "./dto/deleteUser.dto";
 import { GetUserByIdDto } from "./dto/getUserById.dto";
 import { EditUserDto } from "./dto/editUser.dto";
 import { AuthUser } from "src/guard/authUser.guard";
 import { OtpVerifyDto } from "./dto/otpVerify.dto";
 import { UserDetailsDTo } from "./dto/enterDetails.dto";
+import { loginDto } from "./dto/loginDto";
 
 
 @Controller({ path: "/user", version: "1" })
@@ -37,7 +37,7 @@ export class ProfileSetupController {
 
   @Post('/login')
   @UseGuards(NonAuthAdmin)
-  async login(@Req() req: Request, @Res() res: Response, @Body() body: any, @Headers() headers: any): Promise<any> {
+  async login(@Req() req: Request, @Res() res: Response, @Body() body: loginDto, @Headers() headers: any): Promise<any> {
     try {
 
       const data = await this.ProfileSetupService.login(body, headers);
@@ -159,14 +159,17 @@ export class ProfileSetupController {
     }
   }
 
-  @Delete("getUserById")
+  @Get("getUserById")
   @UseGuards(AuthUser)
   async getUserById(
-    @Req() req: Request,
+    @Req() req: any,
     @Res() res: Response,
     @Query() params: GetUserByIdDto
   ): Promise<any> {
     try {
+      if(req.userId) {
+          params = req.userId
+      }
       let data = await this.ProfileSetupService.getUserById(params);
       await this.response.success(
         res,
