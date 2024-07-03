@@ -21,13 +21,10 @@ export class SplitEntity {
   @Column()
   fk_reciver_id: string;
 
-  @Column({ default: 1, comment: `1 : User not deleted, 0 : User deleted`, nullable: true })
-  isArchived: number;
-
-  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  @Column({ default: () => 'CURRENT_TIMESTAMP',})
   createdAt: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  @Column({ default: () => 'CURRENT_TIMESTAMP',})
   updatedAt: Date;
 
   @ManyToOne(() => UserEntity, (userEntity) => userEntity.splitEntity, {

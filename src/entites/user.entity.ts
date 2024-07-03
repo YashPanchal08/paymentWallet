@@ -13,11 +13,11 @@ export class UserEntity {
   @Column({ type: "character varying", nullable: true })
   fullName: string;
 
-  @Column({ type: "character varying", unique: true, nullable: true })
+  @Column({ type: "character varying", nullable: true })
   email: string;
 
-  @Column({ type: "character varying", })
-  mobileNumber: string;
+  @Column({ type: 'bigint' })
+  mobileNumber: number;
 
   @Column({ nullable: true, type: "integer" })
   otp: number;
@@ -27,14 +27,14 @@ export class UserEntity {
 
   @Column({
     default: 1,
-    comment: `1 : item available, 0 : item is not available`,
+    comment: `1 : is login, 0 : logout`,
   })
   isActive: number;
 
-  @Column({ default: () => "CURRENT_TIMESTAMP", nullable: true })
+  @Column({ default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
-  @Column({ default: () => "CURRENT_TIMESTAMP", nullable: true })
+  @Column({ default: () => "CURRENT_TIMESTAMP" })
   updatedAt: Date;
 
   @OneToMany(
@@ -43,7 +43,10 @@ export class UserEntity {
   )
   deviceRelationEntity: DeviceRelationEntity[];
 
-  @OneToMany(() => AuthTokenEntity, (authTokenEntity) => authTokenEntity.userEntity)
+  @OneToMany(
+    () => AuthTokenEntity,
+    (authTokenEntity) => authTokenEntity.userEntity
+  )
   authTokenEntity: AuthTokenEntity[];
 
   @OneToMany(() => AccountEntity, (accountEntity) => accountEntity.userEntity)
@@ -52,7 +55,10 @@ export class UserEntity {
   @OneToMany(() => PaymentEntity, (paymentEntity) => paymentEntity.userEntity)
   paymentEntity: PaymentEntity[];
 
-  @OneToMany(() => PaymentEntity, (paymentEntity) => paymentEntity.reciverEntity)
+  @OneToMany(
+    () => PaymentEntity,
+    (paymentEntity) => paymentEntity.reciverEntity
+  )
   reciverEntity: PaymentEntity[];
 
   @OneToMany(() => SplitEntity, (splitEntity) => splitEntity.userEntity)
@@ -60,5 +66,4 @@ export class UserEntity {
 
   @OneToMany(() => SplitEntity, (splitEntity) => splitEntity.reciverEntity)
   reciverSplitEntity: SplitEntity[];
-
 }

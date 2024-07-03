@@ -33,10 +33,10 @@ export class DeviceRelationEntity {
   @Column({ type: 'character varying', comment: `en for English`, nullable: true })
   language: string;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  @Column({ default: () => 'CURRENT_TIMESTAMP',})
   createdAt: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  @Column({ default: () => 'CURRENT_TIMESTAMP',})
   updatedAt: Date;
 
   @ManyToOne(

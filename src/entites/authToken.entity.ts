@@ -12,7 +12,7 @@ export class AuthTokenEntity {
   @PrimaryGeneratedColumn('uuid')
   authTokenId: string;
 
-  @Column({ nullable: true })
+  @Column()
   fk_user_id: string;
 
   @Column({ type: 'character varying', nullable: true })
@@ -21,10 +21,10 @@ export class AuthTokenEntity {
   @Column({ nullable: true, type: 'character varying' })
   refreshToken: string;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  @Column({ default: () => 'CURRENT_TIMESTAMP',})
   createdAt: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  @Column({ default: () => 'CURRENT_TIMESTAMP',})
   updatedAt: Date;
 
   @OneToMany(() => UserEntity, (userEntity) => userEntity.authTokenEntity, {

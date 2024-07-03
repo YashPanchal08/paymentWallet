@@ -18,13 +18,10 @@ export class AccountEntity {
   @Column({ default: 0, type: 'integer', nullable: true })
   balance: number;
 
-  @Column({ default: 1, comment: `1 : User not deleted, 0 : User deleted`, nullable: true })
-  isArchived: number;
-
-  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  @Column({ default: () => 'CURRENT_TIMESTAMP', })
   createdAt: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  @Column({ default: () => 'CURRENT_TIMESTAMP',})
   updatedAt: Date;
 
   @ManyToOne(() => UserEntity, (userEntity) => userEntity.accountEntity, {

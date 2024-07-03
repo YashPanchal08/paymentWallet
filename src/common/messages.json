@@ -85,6 +85,7 @@
       "PRODUCT_DELETE_SUCCESS": "Item deleted successfully.",
       "CANNOT_ADD_PRODUCT": "Failed to add product.",
       "FIELD_MISSING": "Field missing.",
-      "FAILED_TO_UPDATE" : "Failed to update."
+      "FAILED_TO_UPDATE" : "Failed to update.",
+      "REGISTERED_SUCCESS":"Successfully registered! \n500.00rs added to your payment wallet"
     }
 }
