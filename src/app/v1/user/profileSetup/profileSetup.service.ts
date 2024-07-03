@@ -206,7 +206,7 @@ export class ProfileSetupService {
       try {
         let { mobileNumber, otp } = body;
         const userDetails = await this.userRepository.findOne({
-          where: { mobileNumber: mobileNumber,isArchived: 1 },
+          where: { mobileNumber: mobileNumber, isArchived: 1 },
         });
 
 
@@ -269,7 +269,7 @@ export class ProfileSetupService {
       try {
         const { userId } = body;
         const user = await this.userRepository.findOne({
-          where: { userId: userId },
+          where: { userId: userId, isArchived: 1 },
         });
         if (!user) {
           throw new ConflictException("USER_NOT");
@@ -279,6 +279,12 @@ export class ProfileSetupService {
             { isArchived: 0 }
           );
         }
+
+        if (user.isArchived == 0) {
+          throw new NotFoundException("USER_NOT_FOUND")
+        }
+
+        return resolve()
       } catch (error) {
         console.log(`delete user By Id servioce error ${error}`);
         reject(error);
@@ -291,7 +297,7 @@ export class ProfileSetupService {
       try {
         let { userId, fullName, email } = body;
         const user = await this.userRepository.findOne({
-          where: { userId: userId,isArchived:1 },
+          where: { userId: userId, isArchived: 1 },
         });
         if (!user) {
           throw new ConflictException("USER_NOT");
@@ -315,7 +321,7 @@ export class ProfileSetupService {
       try {
         const { userId } = params;
         const user = await this.userRepository.findOne({
-          where: { userId: userId,isArchived: 1 },
+          where: { userId: userId, isArchived: 1 },
         });
         if (!user) {
           throw new ConflictException("USER_NOT");

@@ -14,9 +14,10 @@ import { FileValidators } from "./common/Validators";
 import { ValidateFilePipe } from "./common/ValidateFile";
 import { JwtUserMiddleware } from "./common/middleware";
 import { ProfileSetupModule } from "./app/v1/user/profileSetup/profileSetup.module";
+import { PaymentModule } from "./app/v1/user/payment/payment.module";
 
 @Module({
-  imports: [TypeOrmModule.forRoot(database),ProfileSetupModule],
+  imports: [TypeOrmModule.forRoot(database), ProfileSetupModule, PaymentModule],
   controllers: [],
   providers: [
     NonAuthAdmin,
