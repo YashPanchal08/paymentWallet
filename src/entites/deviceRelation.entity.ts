@@ -15,28 +15,28 @@ export class DeviceRelationEntity {
   @Column()
   fk_user_id: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   deviceType: number;
 
-  @Column({ type: 'character varying' })
+  @Column({ type: 'character varying', nullable: true })
   deviceId: string;
 
-  @Column({ type: 'character varying' })
+  @Column({ type: 'character varying', nullable: true })
   deviceToken: string;
 
-  @Column({ type: 'character varying' })
+  @Column({ type: 'character varying', nullable: true })
   appVersion: string;
 
-  @Column({ type: 'character varying' })
+  @Column({ type: 'character varying', nullable: true })
   os: string;
 
-  @Column({ type: 'character varying', comment: `en for English` })
+  @Column({ type: 'character varying', comment: `en for English`, nullable: true })
   language: string;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
   createdAt: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
   updatedAt: Date;
 
   @ManyToOne(

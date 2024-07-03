@@ -15,16 +15,16 @@ export class AuthTokenEntity {
   @Column({ nullable: true })
   fk_user_id: string;
 
-  @Column({ type: 'character varying' })
+  @Column({ type: 'character varying', nullable: true })
   accessToken: string;
 
   @Column({ nullable: true, type: 'character varying' })
   refreshToken: string;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
   createdAt: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP', nullable: true })
   updatedAt: Date;
 
   @OneToMany(() => UserEntity, (userEntity) => userEntity.authTokenEntity, {

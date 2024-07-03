@@ -10,13 +10,13 @@ export class UserEntity {
   @PrimaryGeneratedColumn("uuid")
   userId: string;
 
-  @Column({ type: "character varying" })
+  @Column({ type: "character varying", nullable: true })
   fullName: string;
 
-  @Column({ type: "character varying", unique: true })
+  @Column({ type: "character varying", unique: true, nullable: true })
   email: string;
 
-  @Column({ type: "character varying" })
+  @Column({ type: "character varying", })
   mobileNumber: string;
 
   @Column({ nullable: true, type: "integer" })
@@ -31,10 +31,10 @@ export class UserEntity {
   })
   isActive: number;
 
-  @Column({ default: () => "CURRENT_TIMESTAMP" })
+  @Column({ default: () => "CURRENT_TIMESTAMP", nullable: true })
   createdAt: Date;
 
-  @Column({ default: () => "CURRENT_TIMESTAMP" })
+  @Column({ default: () => "CURRENT_TIMESTAMP", nullable: true })
   updatedAt: Date;
 
   @OneToMany(
@@ -43,7 +43,7 @@ export class UserEntity {
   )
   deviceRelationEntity: DeviceRelationEntity[];
 
-  @OneToMany(() => AuthTokenEntity,(authTokenEntity) => authTokenEntity.userEntity)
+  @OneToMany(() => AuthTokenEntity, (authTokenEntity) => authTokenEntity.userEntity)
   authTokenEntity: AuthTokenEntity[];
 
   @OneToMany(() => AccountEntity, (accountEntity) => accountEntity.userEntity)

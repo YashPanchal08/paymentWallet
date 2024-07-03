@@ -47,7 +47,6 @@ export class ProfileSetupService {
         });
     }
 
-
     async login(body: any, headers: DeviceInfoDto): Promise<void> {
 
         return new Promise(async (resolve, reject) => {
