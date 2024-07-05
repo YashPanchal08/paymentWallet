@@ -22,7 +22,6 @@ import { getAllHistoryByIdDto } from "./dto/getAllHistoryById.dto";
 import { paymentDto } from "./dto/payment.dto";
 import { settleUpDto } from "./dto/settleUp.dto";
 
-
 @Controller({ path: "/user", version: "1" })
 @UseGuards(AuthUser)
 export class PaymentController {
@@ -32,7 +31,6 @@ export class PaymentController {
         private readonly response: ResponseHelper,
         private readonly statuscode: statusCode
     ) { }
-
 
     @Get('getAllHistory')
     async getAllHistory(
@@ -146,7 +144,4 @@ export class PaymentController {
             this.response.error(res, error.message, this.statuscode.error);
         }
     }
-
-
-
 }
