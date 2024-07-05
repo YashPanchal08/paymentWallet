@@ -16,7 +16,7 @@ export class UserEntity {
   @Column({ type: "character varying", nullable: true })
   email: string;
 
-  @Column({ type: 'bigint' })
+  @Column({ type: 'bigint',nullable:true })
   mobileNumber: number;
 
   @Column({ nullable: true, type: "integer" })

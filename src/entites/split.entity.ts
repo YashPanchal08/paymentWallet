@@ -15,7 +15,7 @@ export class SplitEntity {
   @Column()
   fk_user_id: string;
 
-  @Column({ default: 0, type: 'integer', nullable: true })
+  @Column({ default: 0, type: 'real', nullable: true })
   splitAmount: number;
 
   @Column()

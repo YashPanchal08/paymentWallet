@@ -86,6 +86,9 @@
       "CANNOT_ADD_PRODUCT": "Failed to add product.",
       "FIELD_MISSING": "Field missing.",
       "FAILED_TO_UPDATE" : "Failed to update.",
-      "REGISTERED_SUCCESS":"Successfully registered! \n500.00rs added to your payment wallet"
+      "PAYMENT_SUCCESS" : "Payment successfully.",
+      "REGISTERED_SUCCESS":"Successfully registered! \n500.00rs added to your payment wallet.",
+      "INSUFFIENCE_BALANCE": "Insuffience account balance.",
+      "CANNOT_SEND_TOYOURSELF": "Cannot send money to yourself."
     }
 }
