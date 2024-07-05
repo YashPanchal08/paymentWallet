@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, NotAcceptableException, NotFoundException, Search } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "src/entites/user.entity";
-import { Repository } from "typeorm";
+import { LessThan, MoreThan, Raw, Repository } from "typeorm";
 import { Token } from "src/common/getJwtToken";
 import { AccountEntity } from "src/entites/account.entity";
 import { SplitEntity } from "src/entites/split.entity";
@@ -10,6 +10,7 @@ import { PaymentEntity } from "src/entites/payment.entity";
 import * as moment from "moment";
 import { getAllHistoryByIdDto } from "./dto/getAllHistoryById.dto";
 import { paymentDto } from "./dto/payment.dto";
+import { settleUpDto } from "./dto/settleUp.dto";
 
 @Injectable()
 export class PaymentService {
@@ -310,11 +311,12 @@ export class PaymentService {
                     `sender."fullName" AS "senderName"`,
                     `split.fk_reciver_id AS "receiverId"`,
                     `receiver."fullName" AS "receiverName"`,
-                    `SUM(split."splitAmount") AS "getsBack"`,
-                    `CASE WHEN '${userId}' IN(select s.fk_reciver_id from split s where s.fk_reciver_id = '${userId}') THEN SUM(split."splitAmount") ELSE 0 END AS "oweBy"`,
+                    `SUM(CASE WHEN split.fk_reciver_id = :userId THEN split."splitAmount" ELSE 0 END) AS "oweBy"`,
+                    `SUM(CASE WHEN split.fk_user_id = :userId THEN split."splitAmount" ELSE 0 END) AS "getsBack"`
                 ])
                 payment.where(`sender."isArchived" = :isArchived`, { isArchived: 1 })
-                payment.andWhere(`split.fk_user_id = :userId`, { userId: userId })
+                payment.andWhere(`(split.fk_user_id = :userId OR split.fk_reciver_id = :userId)`, { userId: userId })
+                payment.andWhere(`split."isSettleUp" = 0`, { isSettleUp: 0 })
                 payment.groupBy(`split.fk_reciver_id`)
                 payment.addGroupBy(`receiver."fullName"`)
                 payment.addGroupBy(`sender."fullName"`)
@@ -323,9 +325,85 @@ export class PaymentService {
                 const [allData] = await Promise.all([
                     payment.getRawMany()
                 ])
-                
+
                 return resolve({
                     allData
+                })
+
+            } catch (error) {
+                console.log(`getAllHistory user service error ${error}`);
+                reject(error);
+            }
+        });
+    }
+
+    async settleUp(body: settleUpDto): Promise<object> {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                let { userId, splitId } = body
+                console.log(body);
+
+                const isUserExits = await this.accountRepository.findOne({
+                    where: {
+                        fk_user_id: userId
+                    }
+                })
+
+                const isSplitExits = await this.splitRepository.findOne({
+                    where: {
+                        splitId: splitId,
+                        isSettleUp: 0
+                    }
+                })
+
+                if (!isUserExits) {
+                    throw new NotFoundException("USER_NOT")
+                }
+                console.log("Split exits---------->", isSplitExits);
+
+                if (isSplitExits) {
+
+                    const isBalance = await this.accountRepository.findOne({
+                        where: {
+                            fk_user_id: isSplitExits.fk_reciver_id,
+                            balance: MoreThan(isSplitExits.splitAmount)
+                        }
+                    })
+
+                    console.log("Balance------------------>", isBalance);
+
+                    if (isBalance) {
+
+                        const finalBalance = isBalance.balance - isSplitExits.splitAmount
+
+                        await this.accountRepository.update({ accountId: isBalance.accountId }, { balance: finalBalance })
+
+                        const isReciverBalance = await this.accountRepository.findOne({
+                            where: {
+                                fk_user_id: isSplitExits.fk_user_id
+                            }
+                        })
+
+                        if (isReciverBalance) {
+                            const finalAmount = isReciverBalance.balance + isSplitExits.splitAmount
+
+                            await this.accountRepository.update({ accountId: isReciverBalance.accountId }, { balance: finalAmount })
+
+
+                        } else {
+                            throw new NotFoundException("USER_NOT")
+                        }
+
+                        await this.splitRepository.update({ splitId: splitId }, { isSettleUp: 1 })
+
+                    } else {
+                        throw new ForbiddenException("INSUFFIENCE_BALANCE")
+                    }
+                } else {
+                    throw new NotFoundException("SPLIT_NOT")
+                }
+                return resolve({
                 })
 
             } catch (error) {

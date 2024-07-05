@@ -17,6 +17,7 @@ import { PaymentController } from "./payment.controller";
 import { AccountEntity } from "src/entites/account.entity";
 import { PaymentEntity } from "src/entites/payment.entity";
 import { SplitEntity } from "src/entites/split.entity";
+import { cronJob } from "src/common/cron.job";
 
 @Module({
     imports: [TypeOrmModule.forFeature([UserEntity, AccountEntity,PaymentEntity,SplitEntity])],
@@ -34,6 +35,7 @@ import { SplitEntity } from "src/entites/split.entity";
         Otp,
         FileValidators,
         ValidateFilePipe,
+        cronJob
     ],
     exports: [],
 })

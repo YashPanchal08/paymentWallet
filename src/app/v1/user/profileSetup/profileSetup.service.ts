@@ -330,7 +330,7 @@ export class ProfileSetupService {
           userId: user.userId,
           fullName: user.fullName ? user.fullName : "",
           email: user.email ? user.email : "",
-          mobileNumber: user.mobileNumber,
+          mobileNumber: (user.mobileNumber),
           isArchived: user.isArchived
         });
       } catch (error) {

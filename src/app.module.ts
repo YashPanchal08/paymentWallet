@@ -15,9 +15,16 @@ import { ValidateFilePipe } from "./common/ValidateFile";
 import { JwtUserMiddleware } from "./common/middleware";
 import { ProfileSetupModule } from "./app/v1/user/profileSetup/profileSetup.module";
 import { PaymentModule } from "./app/v1/user/payment/payment.module";
+import { Cron, ScheduleModule } from "@nestjs/schedule";
+import { cronJob } from "./common/cron.job";
+import { UserEntity } from "./entites/user.entity";
+import { AccountEntity } from "./entites/account.entity";
+import { PaymentEntity } from "./entites/payment.entity";
+import { SplitEntity } from "./entites/split.entity";
+
 
 @Module({
-  imports: [TypeOrmModule.forRoot(database), ProfileSetupModule, PaymentModule],
+  imports: [ScheduleModule.forRoot(), TypeOrmModule.forRoot(database), ProfileSetupModule, PaymentModule, TypeOrmModule.forFeature([UserEntity, AccountEntity, PaymentEntity, SplitEntity])],
   controllers: [],
   providers: [
     NonAuthAdmin,
@@ -32,6 +39,7 @@ import { PaymentModule } from "./app/v1/user/payment/payment.module";
     Otp,
     FileValidators,
     ValidateFilePipe,
+    cronJob
   ],
   exports: [],
 })

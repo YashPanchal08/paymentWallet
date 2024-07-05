@@ -21,10 +21,13 @@ export class SplitEntity {
   @Column()
   fk_reciver_id: string;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP',})
+  @Column({ default: 0, type: "smallint", comment: "0: not settled up, 1: settled up" })
+  isSettleUp: number
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP', })
   createdAt: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP',})
+  @Column({ default: () => 'CURRENT_TIMESTAMP', })
   updatedAt: Date;
 
   @ManyToOne(() => UserEntity, (userEntity) => userEntity.splitEntity, {

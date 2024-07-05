@@ -168,7 +168,7 @@ export class ProfileSetupController {
   ): Promise<any> {
     try {
       if(req.userId) {
-          params = req.userId
+          params.userId = req.userId
       }
       let data = await this.ProfileSetupService.getUserById(params);
       await this.response.success(

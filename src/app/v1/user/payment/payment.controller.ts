@@ -20,6 +20,7 @@ import { AuthUser } from "src/guard/authUser.guard";
 import { getAllHistoryDto } from "./dto/getAllHistory.dto";
 import { getAllHistoryByIdDto } from "./dto/getAllHistoryById.dto";
 import { paymentDto } from "./dto/payment.dto";
+import { settleUpDto } from "./dto/settleUp.dto";
 
 
 @Controller({ path: "/user", version: "1" })
@@ -115,6 +116,28 @@ export class PaymentController {
             await this.response.success(
                 res,
                 "PAYMENT_SUCCESS",
+                data,
+                this.statuscode.success
+            );
+        } catch (error) {
+            console.log(` get User By Id user controller Error ${error}`);
+            this.response.error(res, error.message, this.statuscode.error);
+        }
+    }
+
+    @Post('settleUp')
+    async settleUp(
+        @Req() req: any,
+        @Res() res: Response,
+        @Body() body: settleUpDto): Promise<any> {
+        try {
+            if (req.userId) {
+                body.userId = req.userId
+            }
+            let data = await this.paymentService.settleUp(body);
+            await this.response.success(
+                res,
+                "SUCCESS",
                 data,
                 this.statuscode.success
             );

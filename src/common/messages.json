@@ -87,8 +87,10 @@
       "FIELD_MISSING": "Field missing.",
       "FAILED_TO_UPDATE" : "Failed to update.",
       "PAYMENT_SUCCESS" : "Payment successfully.",
-      "REGISTERED_SUCCESS":"Successfully registered! \n500.00rs added to your payment wallet.",
+      "REGISTERED_SUCCESS":"Successfully registered! 500.00rs added to your payment wallet.",
       "INSUFFIENCE_BALANCE": "Insuffience account balance.",
-      "CANNOT_SEND_TOYOURSELF": "Cannot send money to yourself."
+      "CANNOT_SEND_TOYOURSELF": "Cannot send money to yourself.",
+      "SPLIT_NOT": "Split not found.",
+      "SETTELED_UP": "Settled up successfully."
     }
 }
