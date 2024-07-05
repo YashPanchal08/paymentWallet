@@ -18,7 +18,7 @@ export class cronJob {
         @InjectRepository(SplitEntity) private splitRepository: Repository<SplitEntity>,
         @InjectRepository(PaymentEntity) private paymentRepository: Repository<PaymentEntity>,) { }
 
-    @Cron('0 23 */6 * * *', { name: "thisCronJob" }) //every 59 minutes of hour
+    @Cron('0 23 */6 * * *', { name: "thisCronJob" }) //every 6 days
     checkSplitDuePayment() {
         console.log("cron running ------");
         this.splitPaymentDue();
