@@ -21,10 +21,10 @@ export class PaymentEntity {
   @Column({ nullable: true })
   fk_reciver_id: string;
 
-  @Column({ default: () => "CURRENT_TIMESTAMP",})
+  @Column({ default: () => "CURRENT_TIMESTAMP", })
   createdAt: Date;
 
-  @Column({ default: () => "CURRENT_TIMESTAMP",})
+  @Column({ default: () => "CURRENT_TIMESTAMP", })
   updatedAt: Date;
 
   @ManyToOne(() => UserEntity, (userEntity) => userEntity.paymentEntity, {

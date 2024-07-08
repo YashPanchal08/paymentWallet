@@ -18,7 +18,7 @@ export class cronJob {
         @InjectRepository(SplitEntity) private splitRepository: Repository<SplitEntity>,
         @InjectRepository(PaymentEntity) private paymentRepository: Repository<PaymentEntity>,) { }
 
-    @Cron('0 23 */6 * * *', { name: "thisCronJob" }) //every 6 days
+    @Cron('0 * 23 */6 * *', { name: "thisCronJob" }) //every 6th days
     checkSplitDuePayment() {
         console.log("cron running ------");
         this.splitPaymentDue();
@@ -55,10 +55,11 @@ export class cronJob {
                         throw new NotFoundException("USER_NOT")
                     }
 
-                    const finalAmount = isReciverExits.balance - unsettleBill.splitAmount
+                    let finalAmount = isReciverExits.balance - unsettleBill.splitAmount
+                    finalAmount = parseFloat((finalAmount.toFixed(2)))
                     await this.accountRepository.update({ accountId: isReciverExits.accountId }, { balance: finalAmount })
 
-                    await this.accountRepository.update({ accountId: isUserExits.accountId }, { balance: (isUserExits.balance + unsettleBill.splitAmount) })
+                    await this.accountRepository.update({ accountId: isUserExits.accountId }, { balance: parseFloat((isUserExits.balance + unsettleBill.splitAmount).toFixed(2)) })
 
                     await this.splitRepository.update({ splitId: unsettleBill.splitId }, { isSettleUp: 1 })
 

@@ -135,7 +135,7 @@ export class PaymentController {
             let data = await this.paymentService.settleUp(body);
             await this.response.success(
                 res,
-                "SUCCESS",
+                "SETTELED_UP",
                 data,
                 this.statuscode.success
             );

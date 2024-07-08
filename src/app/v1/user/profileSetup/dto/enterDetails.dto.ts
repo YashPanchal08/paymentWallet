@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsDefined, IsEmail, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class UserDetailsDTo{
   
@@ -11,7 +11,7 @@ export class UserDetailsDTo{
   fullName : string
 
   @IsEmail()
-  @IsOptional()
+  @IsDefined()
   email: string
 
 }

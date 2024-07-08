@@ -24,6 +24,7 @@ import { AuthUser } from "src/guard/authUser.guard";
 import { OtpVerifyDto } from "./dto/otpVerify.dto";
 import { UserDetailsDTo } from "./dto/enterDetails.dto";
 import { loginDto } from "./dto/loginDto";
+import { resendOtp } from "./dto/resendOtp.dto";
 
 
 @Controller({ path: "/user", version: "1" })
@@ -52,7 +53,7 @@ export class ProfileSetupController {
 
   @Post('/resendOtp')
   @UseGuards(NonAuthAdmin)
-  async resendOtp(@Req() req: Request, @Res() res: Response, @Body() body: any): Promise<any> {
+  async resendOtp(@Req() req: Request, @Res() res: Response, @Body() body: resendOtp): Promise<any> {
     try {
 
       const data = await this.ProfileSetupService.resendOtp(body);

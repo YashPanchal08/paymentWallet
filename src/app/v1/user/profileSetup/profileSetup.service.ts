@@ -9,6 +9,7 @@ import { Token } from "src/common/getJwtToken";
 import { AccountEntity } from "src/entites/account.entity";
 import { OtpVerifyDto } from "./dto/otpVerify.dto";
 import { loginDto } from "./dto/loginDto";
+import { resendOtp } from "./dto/resendOtp.dto";
 
 
 @Injectable()
@@ -158,7 +159,7 @@ export class ProfileSetupService {
     });
   }
 
-  async resendOtp(body: any): Promise<void> {
+  async resendOtp(body: resendOtp): Promise<void> {
 
     return new Promise(async (resolve, reject) => {
       try {
@@ -309,6 +310,8 @@ export class ProfileSetupService {
             { fullName: fullName, email: email }
           );
         }
+
+        return resolve()
       } catch (error) {
         console.log(`edit user servioce error ${error}`);
         reject(error);

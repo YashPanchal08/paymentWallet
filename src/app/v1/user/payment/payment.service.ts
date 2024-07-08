@@ -49,19 +49,21 @@ export class PaymentService {
                     `payment.fk_reciver_id AS "receiverId"`,
                     `receiver."fullName" AS "reciverName"`,
                     `payment.amount AS "paidAmount"`,
-                    `payment."createdAt" AS "paymentAt"`
+                    `payment."createdAt" AS "paymentAt"`,
+                    `CASE 
+                        WHEN payment.fk_user_id = :userId THEN 0
+                        WHEN payment.fk_reciver_id = :userId THEN 1
+                    END AS "isCredited"`
                 ])
                 payment.where(`sender."isArchived" = :isArchived`, { isArchived: 1 })
-                payment.andWhere(`payment.fk_user_id = :userId`, { userId: userId })
+                payment.andWhere(`payment.fk_user_id = :userId OR payment.fk_reciver_id = :userId`, { userId: userId })
+                payment.orderBy(`"paymentAt"`, 'DESC')
                 payment.offset((page - 1) * limit)
                 payment.limit(limit)
 
                 if (search) {
                     payment.andWhere(`receiver."fullName" ILIKE (:search)`, { search: `%${search}%` })
                 }
-
-
-
 
                 const [allData, totalCount] = await Promise.all([
                     payment.getRawMany(),
@@ -131,7 +133,11 @@ export class PaymentService {
                     `payment.fk_reciver_id AS "receiverId"`,
                     `receiver."fullName" AS "reciverName"`,
                     `payment.amount AS "paidAmount"`,
-                    `payment."createdAt" AS "paymentAt"`
+                    `payment."createdAt" AS "paymentAt"`,
+                    `CASE 
+                    WHEN payment.fk_user_id = :userId THEN 0
+                    WHEN payment.fk_reciver_id = :userId THEN 1
+                END AS "isCredited"`
                 ])
                 payment.where(`sender."isArchived" = :isArchived`, { isArchived: 1 })
                 payment.andWhere(`payment.fk_user_id = :userId AND payment.fk_reciver_id = :receiverId`, { userId: userId, receiverId: receiverId })
@@ -226,7 +232,8 @@ export class PaymentService {
 
                     if (isMoneyTransffred) {
 
-                        const finalAmount = isSenderExists.balance - amount;
+                        let finalAmount = isSenderExists.balance - amount;
+                        finalAmount = parseFloat(finalAmount.toFixed(2))
                         console.log("Sender Balance----------->", isSenderExists.balance);
                         console.log("Final Amount---------------->", finalAmount);
                         const senderBalance = await this.accountRepository.save({
@@ -236,7 +243,7 @@ export class PaymentService {
                         })
 
                         console.log("Reciver balance------->", isReciverBalanceExists.balance);
-                        const addedBalance = (isReciverBalanceExists.balance + amount);
+                        const addedBalance = parseFloat((isReciverBalanceExists.balance + amount).toFixed(2));
                         console.log(addedBalance);
                         await this.accountRepository.save({
                             accountId: isReciverBalanceExists.accountId,
@@ -265,7 +272,7 @@ export class PaymentService {
                         // console.log("Split ids----------->", isSplitUserPresent);
                         console.log(splitParseIds.length);
                         const length = splitParseIds.length + 1
-                        const finalSplitAmount = (amount / length)
+                        const finalSplitAmount = parseFloat((amount / length).toFixed(2))
 
                         console.log(finalSplitAmount);
 
@@ -353,7 +360,8 @@ export class PaymentService {
                 const isSplitExits = await this.splitRepository.findOne({
                     where: {
                         splitId: splitId,
-                        isSettleUp: 0
+                        isSettleUp: 0,
+                        fk_reciver_id: userId
                     }
                 })
 
@@ -375,8 +383,9 @@ export class PaymentService {
 
                     if (isBalance) {
 
-                        const finalBalance = isBalance.balance - isSplitExits.splitAmount
-
+                        let finalBalance = isBalance.balance - isSplitExits.splitAmount
+                        finalBalance = parseFloat(finalBalance.toFixed(2))
+                        console.log("Debiteddd----------->", finalBalance);
                         await this.accountRepository.update({ accountId: isBalance.accountId }, { balance: finalBalance })
 
                         const isReciverBalance = await this.accountRepository.findOne({
@@ -386,11 +395,12 @@ export class PaymentService {
                         })
 
                         if (isReciverBalance) {
-                            const finalAmount = isReciverBalance.balance + isSplitExits.splitAmount
+                            let finalAmount = isReciverBalance.balance + isSplitExits.splitAmount
+                            finalAmount = parseFloat(finalAmount.toFixed(2))
+                            console.log("Credited----------->", finalAmount);
+
 
                             await this.accountRepository.update({ accountId: isReciverBalance.accountId }, { balance: finalAmount })
-
-
                         } else {
                             throw new NotFoundException("USER_NOT")
                         }

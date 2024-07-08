@@ -1,20 +1,17 @@
 // src/users/dto/create-user.dto.ts
 
-import { IsNotEmpty, IsNumber, Validate } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
+import { IsInt, IsNumber, IsString, Length, Matches, Validate } from 'class-validator';
 
-function isPhoneNumber(value: number) {
-
-    const phoneRegex = /^[0-9]{10}$/; 
-    return typeof value === 'number' && phoneRegex.test(value.toString());
+function isTenDigitNumber(value: any) {
+    const phoneRegex = /^[0-9]{10}$/;
+    return typeof value === 'string' && phoneRegex.test(value);
 }
-
 export class loginDto {
 
-    @IsNumber()
-    @Validate(isPhoneNumber, {
-        message: 'Phone number must be a valid format (e.g., 10-digit number)'
-    })
-    @Type(() => Number)
-    phoneNumber: number;
+        @Transform(({ value }) => String(value))
+        @IsString({ message: 'Phone number must be a string' }) 
+        @Length(10, 10, { message: 'Phone number must be a valid 10-digit number' }) 
+        @Validate(isTenDigitNumber, { message: 'Phone number must be a valid 10-digit number' }) 
+        phoneNumber: number;
 }
